@@ -3,20 +3,33 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class Curves extends JPanel {
     ArrayList<Point> points = new ArrayList<>();
+    JFrame frame;
+    JPanel panel;
+    JButton clear = new JButton("Clear");
+    JButton draw = new JButton("Draw");
 
     public static void main(String[] args) {
         Curves curves = new Curves();
-        JFrame frame = new JFrame();
-        frame.setTitle("Polygon");
-        frame.setSize(350, 250);
+        curves.frame = new JFrame();
 
-        Container contentPane = frame.getContentPane();
+        curves.panel = new JPanel();
+        curves.clear.setBounds(0, 0, 75, 75);
+        curves.draw.setBounds(75, 0, 75, 75);
+        curves.panel.add(curves.clear);
+        curves.panel.add(curves.draw);
+        curves.panel.setBounds(0, 0, 100, 100);
+        curves.frame.add(curves.panel);
+
+        curves.frame.setTitle("Curves in Computer Graphics");
+        curves.frame.setSize(1280, 720);
+        Container contentPane = curves.frame.getContentPane();
         contentPane.add(curves);
-        frame.setVisible(true);
+        curves.frame.setVisible(true);
     }
 
 
@@ -37,14 +50,38 @@ public class Curves extends JPanel {
                 repaint();
             }
         });
+
+        clear.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                //Removes points from array list points
+                points.clear();
+                repaint();
+            }
+        });
     }
 
+    @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        if (points.isEmpty()) {
+            clearDisplay(g);
+            return;
+        }
 
         for (Point p : points) {
             g.fillOval(p.x, p.y, 5, 5);
         }
+    }
+
+    public void clearDisplay(Graphics g) {
+        //Clears points by setting display to the default background colour
+        g.setColor(frame.getBackground());
+        g.fillRect(0, 0, getWidth(), getHeight());
+        //Buttons disappear when drawn over, so are simply
+        // re-added to avoid this issue in a simple way
+        panel.remove(clear);
+        panel.remove(draw);
+        panel.add(clear);
+        panel.add(draw);
     }
 
 }
