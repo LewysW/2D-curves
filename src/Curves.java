@@ -11,6 +11,7 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 public class Curves extends JPanel {
     ArrayList<Point2D> points = new ArrayList<>();
     Bezier bezier = new Bezier();
+    BezierSpline bezierSpline = new BezierSpline();
     JFrame frame;
     JPanel panel;
     JButton clear = new JButton("Clear");
@@ -59,6 +60,7 @@ public class Curves extends JPanel {
                 //Removes points from array list points
                 points.clear();
                 bezier.clear();
+                bezierSpline.clear();
                 repaint();
             }
         });
@@ -69,6 +71,11 @@ public class Curves extends JPanel {
                 bezier.clear();
                 bezier.generateCurve(points);
                 bezier.generatePath();
+
+                bezierSpline.clear();
+                bezierSpline.generateCurve(points);
+                bezierSpline.generatePaths();
+
                 repaint();
             }
         });
@@ -84,7 +91,6 @@ public class Curves extends JPanel {
             return;
         }
 
-        System.out.println(points.size());
         //Plots point where user has clicked
         for (Point2D p : points) {
             graphics2D.setColor(Color.BLACK);
@@ -92,9 +98,16 @@ public class Curves extends JPanel {
         }
 
         //Draws bezier curve
-        System.out.println(bezier.getCurve().size());
         graphics2D.setColor(Color.RED);
         graphics2D.draw(bezier.getPath());
+
+        //Draws bezier spline
+        graphics2D.setColor(Color.GREEN);
+
+        for (Path2D path2D : bezierSpline.getPaths()) {
+            graphics2D.draw(path2D);
+        }
+
     }
 
     public void clearDisplay(Graphics g) {
