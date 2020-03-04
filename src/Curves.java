@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -7,7 +9,8 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class Curves extends JPanel {
-    ArrayList<Point> points = new ArrayList<>();
+    ArrayList<Point2D> points = new ArrayList<>();
+    Bezier bezier = new Bezier();
     JFrame frame;
     JPanel panel;
     JButton clear = new JButton("Clear");
@@ -23,12 +26,13 @@ public class Curves extends JPanel {
         curves.panel.add(curves.clear);
         curves.panel.add(curves.draw);
         curves.panel.setBounds(0, 0, 100, 100);
-        curves.frame.add(curves.panel);
 
         curves.frame.setTitle("Curves in Computer Graphics");
         curves.frame.setSize(1280, 720);
         Container contentPane = curves.frame.getContentPane();
-        contentPane.add(curves);
+        contentPane.add(curves, BorderLayout.CENTER);
+        curves.panel.setBorder(BorderFactory.createLineBorder(Color.gray));
+        contentPane.add(curves.panel, BorderLayout.LINE_START);
         curves.frame.setVisible(true);
     }
 
@@ -45,7 +49,6 @@ public class Curves extends JPanel {
             // override only those which interests us
             @Override //I override only one method for presentation
             public void mousePressed(MouseEvent e) {
-                System.out.println(e.getX() + "," + e.getY());
                 points.add(new Point(e.getX(), e.getY()));
                 repaint();
             }
@@ -55,21 +58,43 @@ public class Curves extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 //Removes points from array list points
                 points.clear();
+                bezier.clear();
+                repaint();
+            }
+        });
+
+        draw.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                //Removes points from array list points
+                bezier.clear();
+                bezier.generateCurve(points);
+                bezier.generatePath();
                 repaint();
             }
         });
     }
 
-    @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D graphics2D = (Graphics2D) g;
+
+        //Clears points if list of points are empty
         if (points.isEmpty()) {
             clearDisplay(g);
             return;
         }
 
-        for (Point p : points) {
-            g.fillOval(p.x, p.y, 5, 5);
+        System.out.println(points.size());
+        //Plots point where user has clicked
+        for (Point2D p : points) {
+            graphics2D.setColor(Color.BLACK);
+            graphics2D.fillOval((int) (p.getX() - 5.0 / 2.0), (int) (p.getY() - 5.0 / 2.0), 5, 5);
         }
+
+        //Draws bezier curve
+        System.out.println(bezier.getCurve().size());
+        graphics2D.setColor(Color.RED);
+        graphics2D.draw(bezier.getPath());
     }
 
     public void clearDisplay(Graphics g) {
