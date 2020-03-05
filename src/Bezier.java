@@ -22,6 +22,8 @@ public class Bezier {
         for (double u = 0; u <= 1; u += 0.0001) {
             curve.add(formula(points, u, points.size() - 1));
         }
+
+        generatePath();
     }
 
     private Point2D formula(ArrayList<Point2D> points, double u, long n) {

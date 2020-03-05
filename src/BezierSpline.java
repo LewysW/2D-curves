@@ -15,6 +15,7 @@ public class BezierSpline {
     }
 
     public void generateCurve(ArrayList<Point2D> points) {
+        ArrayList<Point2D> splinePoints = new ArrayList<>();
         //If point, line, quadratic, or cubic, call superclass
         if (points.size() <= CUBIC) {
             bezier.generateCurve(points);
@@ -26,14 +27,18 @@ public class BezierSpline {
 
         //Adds the required number of control points
         for (int i = 0; i < points.size(); i++) {
+            splinePoints.add(points.get(i));
+
             if (i == controlPoint) {
                 controlPoint += 3;
-                points.add(i, generateControlPoint(points.get(i - 1), points.get(i)));
+                splinePoints.add(i, generateControlPoint(points.get(i - 1), points.get(i)));
             }
         }
 
-        this.spline = points;
+        this.spline = splinePoints;
         System.out.println("Points: " + points.size());
+
+        generatePaths();
     }
 
     public void generatePaths() {
@@ -44,7 +49,8 @@ public class BezierSpline {
         Bezier bezier = new Bezier();
         ArrayList<Point2D> points = new ArrayList<>();
 
-        for (Point2D point : spline) {
+        for (int p = 0; p < spline.size(); p++) {
+            Point2D point = spline.get(p);
             points.add(point);
 
             if (points.size() == CUBIC) {
@@ -52,6 +58,9 @@ public class BezierSpline {
                 bezier.generatePath();
                 paths.add(bezier.getPath());
                 points.clear();
+
+                //Includes imaginary point in next bezier curve
+                p--;
             }
         }
         System.out.println(spline.size());
@@ -62,7 +71,8 @@ public class BezierSpline {
     }
 
     private Point2D generateControlPoint(Point2D point1, Point2D point2) {
-        return new Point2D.Double((point2.getX() - point1.getX()) / 2.0, (point2.getY() - point1.getY()) / 2.0);
+        return new Point2D.Double(((point2.getX() - point1.getX()) / 2.0) + point1.getX(),
+                ((point2.getY() - point1.getY()) / 2.0) + point1.getY());
     }
 
     public ArrayList<Path2D> getPaths() {

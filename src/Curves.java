@@ -70,11 +70,9 @@ public class Curves extends JPanel {
                 //Removes points from array list points
                 bezier.clear();
                 bezier.generateCurve(points);
-                bezier.generatePath();
 
                 bezierSpline.clear();
                 bezierSpline.generateCurve(points);
-                bezierSpline.generatePaths();
 
                 repaint();
             }
