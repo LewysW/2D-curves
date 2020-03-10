@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class BezierSpline {
     private final int CUBIC = 4;
-    Bezier bezier = new Bezier();
+    private Bezier bezier = new Bezier();
     private ArrayList<Point2D> spline = new ArrayList<>();
     private ArrayList<Path2D>  paths = new ArrayList<>();
 

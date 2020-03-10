@@ -1,3 +1,10 @@
+import org.ejml.data.DMatrix;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.DenseD2Matrix64F;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.dense.row.linsol.InvertUsingSolve_CDRM;
+import org.ejml.sparse.csc.CommonOps_DSCC;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Path2D;
@@ -9,15 +16,64 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class Curves extends JPanel {
-    ArrayList<Point2D> points = new ArrayList<>();
-    Bezier bezier = new Bezier();
-    BezierSpline bezierSpline = new BezierSpline();
-    JFrame frame;
-    JPanel panel;
-    JButton clear = new JButton("Clear");
-    JButton draw = new JButton("Draw");
+    private ArrayList<Point2D> points = new ArrayList<>();
+    private Bezier bezier = new Bezier();
+    private BezierSpline bezierSpline = new BezierSpline();
+    private JFrame frame;
+    private JPanel panel;
+    private JButton clear = new JButton("Clear");
+    private JButton draw = new JButton("Draw");
 
     public static void main(String[] args) {
+        DMatrixRMaj equations = new DMatrixRMaj(5, 5);
+
+        //Sets first row
+        equations.set(0,0, 1);
+        equations.set(0,1, 1);
+
+
+        //Sets second row
+        equations.set(1, 2, 1);
+        equations.set(1, 3, 1);
+        equations.set(1, 4, 1);
+
+        //Sets third row
+        equations.set(2, 0, 1);
+        equations.set(2,1,3);
+        equations.set(2,2, -1);
+
+
+        //Sets fourth row
+        equations.set(3, 1, 3);
+        equations.set(3,3,-1);
+
+        //Sets fifth row
+        equations.set(4, 3, 2);
+        equations.set(4, 4, 6);
+
+        DMatrixRMaj constants = new DMatrixRMaj(5, 1);
+
+        constants.set(0, 0, 1);
+        constants.set(1, 0, 2);
+
+        DMatrixRMaj inverseMatrix = new DMatrixRMaj(5, 5);
+        inverseMatrix.zero();
+        CommonOps_DDRM.invert(equations, inverseMatrix);
+
+        System.out.println("Equations:");
+        System.out.println(equations);
+        System.out.println("Inverse:");
+        System.out.println(inverseMatrix);
+        System.out.println("Constants:");
+        System.out.println(constants);
+
+        DMatrixRMaj coefficients = new DMatrixRMaj(5, 1);
+        CommonOps_DDRM.mult(inverseMatrix, constants, coefficients);
+
+        System.out.println("Coefficients:");
+        System.out.println(coefficients);
+
+
         Curves curves = new Curves();
         curves.frame = new JFrame();
 
