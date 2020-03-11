@@ -1,9 +1,6 @@
-import org.ejml.data.DMatrix;
-import org.ejml.data.DMatrixRMaj;
-import org.ejml.data.DenseD2Matrix64F;
-import org.ejml.dense.row.CommonOps_DDRM;
-import org.ejml.dense.row.linsol.InvertUsingSolve_CDRM;
-import org.ejml.sparse.csc.CommonOps_DSCC;
+import org.apache.commons.math3.linear.LUDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -25,54 +22,16 @@ public class Curves extends JPanel {
     private JButton draw = new JButton("Draw");
 
     public static void main(String[] args) {
-        DMatrixRMaj equations = new DMatrixRMaj(5, 5);
+        double[][] matrix = {{1d, 2d, 3d}, {2d, 5d, 3d}};
 
-        //Sets first row
-        equations.set(0,0, 1);
-        equations.set(0,1, 1);
+        RealMatrix m = MatrixUtils.createRealMatrix(matrix);
 
+        System.out.println(m);
 
-        //Sets second row
-        equations.set(1, 2, 1);
-        equations.set(1, 3, 1);
-        equations.set(1, 4, 1);
+        LUDecomposition luDecomposition = new LUDecomposition(m);
 
-        //Sets third row
-        equations.set(2, 0, 1);
-        equations.set(2,1,3);
-        equations.set(2,2, -1);
-
-
-        //Sets fourth row
-        equations.set(3, 1, 3);
-        equations.set(3,3,-1);
-
-        //Sets fifth row
-        equations.set(4, 3, 2);
-        equations.set(4, 4, 6);
-
-        DMatrixRMaj constants = new DMatrixRMaj(5, 1);
-
-        constants.set(0, 0, 1);
-        constants.set(1, 0, 2);
-
-        DMatrixRMaj inverseMatrix = new DMatrixRMaj(5, 5);
-        inverseMatrix.zero();
-        CommonOps_DDRM.invert(equations, inverseMatrix);
-
-        System.out.println("Equations:");
-        System.out.println(equations);
-        System.out.println("Inverse:");
-        System.out.println(inverseMatrix);
-        System.out.println("Constants:");
-        System.out.println(constants);
-
-        DMatrixRMaj coefficients = new DMatrixRMaj(5, 1);
-        CommonOps_DDRM.mult(inverseMatrix, constants, coefficients);
-
-        System.out.println("Coefficients:");
-        System.out.println(coefficients);
-
+        //Need to pass B in as a parameter to get X from AX = B
+        //luDecomposition.getSolver().solve();
 
         Curves curves = new Curves();
         curves.frame = new JFrame();
