@@ -63,6 +63,7 @@ public class Curves extends JPanel {
                 points.clear();
                 bezier.clear();
                 bezierSpline.clear();
+                icps.clear();
                 repaint();
             }
         });
@@ -76,6 +77,7 @@ public class Curves extends JPanel {
                 bezierSpline.clear();
                 bezierSpline.generateCurve(points);
 
+                icps.clear();
                 icps.generateCurve(points);
 
                 repaint();
@@ -105,10 +107,13 @@ public class Curves extends JPanel {
 
         //Draws bezier spline
         graphics2D.setColor(Color.GREEN);
-
         for (Path2D path2D : bezierSpline.getPaths()) {
             graphics2D.draw(path2D);
         }
+
+        //Draws interpolating cubic polynomial spline
+        graphics2D.setColor(Color.BLUE);
+        graphics2D.draw(icps.getPath());
 
     }
 
