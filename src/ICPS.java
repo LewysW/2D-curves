@@ -60,9 +60,9 @@ public class ICPS {
             for (double p = 0; p <= 1; p += 0.0001) {
                 //Calculates x and y coords of current spline using cubic spline formula
                 // Xi(p) = ai + biP + ciP^2 + diP^3
-                double x = ax + (bx * p) + (cx * Math.pow(p, 2)) + (3.0 * dx * Math.pow(p, 3));
+                double x = ax + (bx * p) + (cx * Math.pow(p, 2)) + (dx * Math.pow(p, 3));
                 // Yi(p) = ai + biP + ciP^2 + diP^3
-                double y = ay + (by * p) + (cy * Math.pow(p, 2)) + (3.0 * dy * Math.pow(p, 3));
+                double y = ay + (by * p) + (cy * Math.pow(p, 2)) + (dy * Math.pow(p, 3));
 
                 Point2D point = new Point2D.Double();
                 point.setLocation(x, y);
