@@ -57,6 +57,7 @@ public class BezierSpline {
                 bezier.generateCurve(points);
                 bezier.generatePath();
                 paths.add(bezier.getPath());
+                System.out.println("points.size():" + points.size());
                 points.clear();
 
                 //Includes imaginary point in next bezier curve
