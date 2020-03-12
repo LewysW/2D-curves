@@ -32,12 +32,13 @@ public class BezierSpline {
                 current = 0;
             }
 
-            splinePoints.add(points.get(i));
+            Point2D point = new Point2D.Double();
+            point.setLocation(points.get(i).getX(), points.get(i).getY());
+            splinePoints.add(point);
             current++;
         }
 
         this.spline = splinePoints;
-        System.out.println("Points: " + splinePoints.size());
 
         generatePaths();
     }
@@ -64,8 +65,6 @@ public class BezierSpline {
             }
         }
 
-        System.out.println("Points.size(): " + points.size());
-        System.out.println(points);
         bezier.generateCurve(points);
         bezier.generatePath();
         paths.add(bezier.getPath());

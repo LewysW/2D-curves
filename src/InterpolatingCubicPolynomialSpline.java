@@ -40,9 +40,6 @@ public class InterpolatingCubicPolynomialSpline {
         RealMatrix D_X = getCoefficients(matrixA, matrixB_X, points, true);
         RealMatrix D_Y = getCoefficients(matrixA, matrixB_Y, points, false);
 
-        System.out.println(D_X);
-        System.out.println(D_Y);
-
         for (int i = 0; i < points.size() - 1; i++) {
             //Gets coefficients for x
             ax = points.get(i).getX();
@@ -78,9 +75,6 @@ public class InterpolatingCubicPolynomialSpline {
     RealMatrix getCoefficients(double[][] matrixA, double[][] matrixB, ArrayList<Point2D> points, boolean x) {
         RealMatrix A = MatrixUtils.createRealMatrix(matrixA);
         RealMatrix B = MatrixUtils.createRealMatrix(matrixB);
-
-        System.out.println(A);
-        System.out.println(B);
 
         DecompositionSolver solver = new LUDecomposition(A).getSolver();
 
