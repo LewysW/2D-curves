@@ -1,7 +1,3 @@
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Path2D;
@@ -16,23 +12,14 @@ public class Curves extends JPanel {
     private ArrayList<Point2D> points = new ArrayList<>();
     private Bezier bezier = new Bezier();
     private BezierSpline bezierSpline = new BezierSpline();
+    private ICPS icps = new ICPS();
+
     private JFrame frame;
     private JPanel panel;
     private JButton clear = new JButton("Clear");
     private JButton draw = new JButton("Draw");
 
     public static void main(String[] args) {
-        double[][] matrix = {{1d, 2d, 3d}, {2d, 5d, 3d}};
-
-        RealMatrix m = MatrixUtils.createRealMatrix(matrix);
-
-        System.out.println(m);
-
-        LUDecomposition luDecomposition = new LUDecomposition(m);
-
-        //Need to pass B in as a parameter to get X from AX = B
-        //luDecomposition.getSolver().solve();
-
         Curves curves = new Curves();
         curves.frame = new JFrame();
 
@@ -88,6 +75,8 @@ public class Curves extends JPanel {
 
                 bezierSpline.clear();
                 bezierSpline.generateCurve(points);
+
+                icps.generateCurve(points);
 
                 repaint();
             }
