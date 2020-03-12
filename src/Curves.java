@@ -5,14 +5,13 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import javax.swing.*;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class Curves extends JPanel {
     private ArrayList<Point2D> points = new ArrayList<>();
     private Bezier bezier = new Bezier();
     private BezierSpline bezierSpline = new BezierSpline();
-    private ICPS icps = new ICPS();
+    private InterpolatingCubicPolynomialSpline interpolatingCubicPolynomialSpline = new InterpolatingCubicPolynomialSpline();
 
     private JFrame frame;
     private JPanel panel;
@@ -63,7 +62,7 @@ public class Curves extends JPanel {
                 points.clear();
                 bezier.clear();
                 bezierSpline.clear();
-                icps.clear();
+                interpolatingCubicPolynomialSpline.clear();
                 repaint();
             }
         });
@@ -77,8 +76,8 @@ public class Curves extends JPanel {
                 bezierSpline.clear();
                 bezierSpline.generateCurve(points);
 
-                icps.clear();
-                icps.generateCurve(points);
+                interpolatingCubicPolynomialSpline.clear();
+                interpolatingCubicPolynomialSpline.generateCurve(points);
 
                 repaint();
             }
@@ -113,7 +112,7 @@ public class Curves extends JPanel {
 
         //Draws interpolating cubic polynomial spline
         graphics2D.setColor(Color.BLUE);
-        graphics2D.draw(icps.getPath());
+        graphics2D.draw(interpolatingCubicPolynomialSpline.getPath());
 
     }
 

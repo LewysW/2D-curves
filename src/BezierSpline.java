@@ -23,20 +23,21 @@ public class BezierSpline {
             return;
         }
 
-        int controlPoint = 3;
-
+        int current = 0;
         //Adds the required number of control points
         for (int i = 0; i < points.size(); i++) {
-            splinePoints.add(points.get(i));
-
-            if (i == controlPoint) {
-                controlPoint += 3;
+            if (current == 3) {
                 splinePoints.add(i, generateControlPoint(points.get(i - 1), points.get(i)));
+
+                current = 0;
             }
+
+            splinePoints.add(points.get(i));
+            current++;
         }
 
         this.spline = splinePoints;
-        System.out.println("Points: " + points.size());
+        System.out.println("Points: " + splinePoints.size());
 
         generatePaths();
     }
@@ -50,25 +51,25 @@ public class BezierSpline {
         ArrayList<Point2D> points = new ArrayList<>();
 
         for (int p = 0; p < spline.size(); p++) {
-            Point2D point = spline.get(p);
+            Point2D point = new Point2D.Double();
+            point.setLocation(spline.get(p).getX(), spline.get(p).getY());
             points.add(point);
-
+            bezier = new Bezier();
             if (points.size() == CUBIC) {
                 bezier.generateCurve(points);
                 bezier.generatePath();
                 paths.add(bezier.getPath());
-                System.out.println("points.size():" + points.size());
                 points.clear();
-
-                //Includes imaginary point in next bezier curve
                 p--;
             }
         }
-        System.out.println(spline.size());
+
+        System.out.println("Points.size(): " + points.size());
+        System.out.println(points);
         bezier.generateCurve(points);
         bezier.generatePath();
         paths.add(bezier.getPath());
-        System.out.println("Paths: " + paths.size());
+
     }
 
     private Point2D generateControlPoint(Point2D point1, Point2D point2) {
