@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.*;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
@@ -80,6 +81,7 @@ public class Curves extends JPanel {
                 bezier.clear();
                 bezierSpline.clear();
                 ICPS.clear();
+                bezier.setPoint(null);
                 repaint();
             }
         });
@@ -90,6 +92,7 @@ public class Curves extends JPanel {
 
                 //Removes points from array list points
                 bezier.clear();
+                bezier.setPoint(null);
                 bezier.generateCurve(points);
 
                 bezierSpline.clear();
@@ -100,6 +103,20 @@ public class Curves extends JPanel {
 
 
                 repaint();
+            }
+        });
+
+        gen.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (bezier.getCurve().size() <= 1) return;
+
+                if (bezierCheck.isSelected()) {
+                    Random random = new Random();
+                    double randomDouble = random.nextDouble();
+                    int index = (int) (bezier.getCurve().size() * randomDouble);
+                    bezier.setPoint(bezier.getCurve().get(index));
+                    repaint();
+                }
             }
         });
     }
@@ -127,7 +144,7 @@ public class Curves extends JPanel {
         if (bezierSplineCheck.isSelected()) {
             //Draws bezier spline
             graphics2D.setColor(Color.GREEN);
-            System.out.println("Size of bezier spline paths: " + bezierSpline.getPaths().size());
+
             for (Path2D path2D : bezierSpline.getPaths()) {
                 graphics2D.draw(path2D);
             }
@@ -138,6 +155,12 @@ public class Curves extends JPanel {
             //Draws bezier curve
             graphics2D.setColor(Color.RED);
             graphics2D.draw(bezier.getPath());
+
+            if (bezier.getPoint() != null) {
+                g.setColor(Color.BLACK);
+                graphics2D.drawOval((int) ((bezier.getPoint().getX() - 5.0 / 2.0) - 7.5),
+                        (int) ((bezier.getPoint().getY() - 5.0 / 2.0) - 7.5), 20, 20);
+            }
         }
 
         if (ICPSCheck.isSelected()) {
@@ -158,10 +181,6 @@ public class Curves extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
         //Buttons disappear when drawn over, so are simply
         // re-added to avoid this issue in a simple way
-        panel.remove(clear);
-        panel.remove(draw);
-        panel.add(clear);
-        panel.add(draw);
     }
 
 }

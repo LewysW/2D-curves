@@ -6,6 +6,15 @@ import java.util.ArrayList;
 public class Bezier {
     private ArrayList<Point2D> curve = new ArrayList<>();
     private Path2D path = new Path2D.Double();
+    private Point2D point = null;
+
+    public Point2D getPoint() {
+        return point;
+    }
+
+    public void setPoint(Point2D point) {
+        this.point = point;
+    }
 
     public ArrayList<Point2D> getCurve() {
         return curve;
