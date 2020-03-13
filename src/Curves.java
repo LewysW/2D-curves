@@ -52,6 +52,7 @@ public class Curves extends JPanel {
 
         curves.repaint();
         curves.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        curves.frame.setResizable(false);
     }
 
 
