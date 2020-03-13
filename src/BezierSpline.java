@@ -28,9 +28,6 @@ public class BezierSpline {
         int end = start + 3;
 
         while (end < splinePoints.size() - 1) {
-            System.out.println("start: " + start);
-            System.out.println("end: " + end);
-
             splinePoints.add(end, generateControlPoint(splinePoints.get(end - 1), splinePoints.get(end)));
 
             start = end;
@@ -56,10 +53,9 @@ public class BezierSpline {
             } else {
                 points.add(spline.get(current++));
             }
-
-            System.out.println("Points.size1(): " + points.size());
+            
         }
-        System.out.println("points.size2(): " + points.size());
+
         Bezier bezier = new Bezier();
         bezier.generateCurve(points);
         bezier.generatePath();

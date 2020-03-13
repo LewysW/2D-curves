@@ -13,10 +13,12 @@ public class Curves extends JPanel {
     private BezierSpline bezierSpline = new BezierSpline();
     private ICPS ICPS = new ICPS();
 
+    private final int BORDER_GAP = 30;
     private JFrame frame;
     private JPanel panel;
     private JButton clear = new JButton("Clear");
     private JButton draw = new JButton("Draw");
+    private JButton gen = new JButton("Generate");
 
     static private JCheckBox bezierCheck = new JCheckBox("Bezier");
     static private JCheckBox bezierSplineCheck = new JCheckBox("Bezier Spline");
@@ -27,15 +29,18 @@ public class Curves extends JPanel {
         curves.frame = new JFrame();
 
         curves.panel = new JPanel();
-        curves.clear.setBounds(0, 0, 75, 75);
-        curves.draw.setBounds(75, 0, 75, 75);
+        curves.panel.setLayout(new BoxLayout(curves.panel, BoxLayout.PAGE_AXIS));
+
         curves.panel.add(curves.clear);
         curves.panel.add(curves.draw);
-        curves.panel.setBounds(0, 0, 100, 100);
+        curves.panel.add(curves.gen);
 
         curves.panel.add(bezierCheck);
         curves.panel.add(bezierSplineCheck);
         curves.panel.add(ICPSCheck);
+
+
+        curves.panel.updateUI();
 
         curves.frame.setTitle("Curves in Computer Graphics");
         curves.frame.setSize(1280, 720);
@@ -44,6 +49,9 @@ public class Curves extends JPanel {
         curves.panel.setBorder(BorderFactory.createLineBorder(Color.gray));
         contentPane.add(curves.panel, BorderLayout.LINE_START);
         curves.frame.setVisible(true);
+
+        curves.repaint();
+        curves.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
 
@@ -102,8 +110,12 @@ public class Curves extends JPanel {
         //Clears points if list of points are empty
         if (points.isEmpty()) {
             clearDisplay(g);
+            g.setColor(Color.BLACK);
+            g.drawLine(0, getHeight()/2, getWidth(), getHeight() / 2);
+            g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
             return;
         }
+
 
         //Plots point where user has clicked
         for (Point2D p : points) {
@@ -132,6 +144,10 @@ public class Curves extends JPanel {
             graphics2D.setColor(Color.BLUE);
             graphics2D.draw(ICPS.getPath());
         }
+
+        g.setColor(Color.BLACK);
+        g.drawLine(0, getHeight()/2, getWidth(), getHeight() / 2);
+        g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
 
     }
 
