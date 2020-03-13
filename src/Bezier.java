@@ -26,7 +26,7 @@ public class Bezier {
         generatePath();
     }
 
-    private Point2D formula(ArrayList<Point2D> points, double u, long n) {
+    private Point2D formula(ArrayList<Point2D> points, double u, double n) {
         Point2D point = new Point2D.Double();
         double coefficient;
         double x = 0;
@@ -43,12 +43,12 @@ public class Bezier {
         return point;
     }
 
-    private long binomialCoefficient(long n, long i) {
+    private double binomialCoefficient(double n, double i) {
         //n!/i!(n - i)!
         return (factorial(n)/(factorial(i)* factorial(n - i)));
     }
 
-    private long factorial(long i) {
+    private double factorial(double i) {
         if (i <= 1) {
             return 1;
         } else {

@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 //Interpolating cubic polynomial spline class
-public class InterpolatingCubicPolynomialSpline {
+public class ICPS {
     private ArrayList<Point2D> spline = new ArrayList<>();
     private Path2D  path = new Path2D.Double();
 

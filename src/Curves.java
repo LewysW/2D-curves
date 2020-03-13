@@ -11,12 +11,16 @@ public class Curves extends JPanel {
     private ArrayList<Point2D> points = new ArrayList<>();
     private Bezier bezier = new Bezier();
     private BezierSpline bezierSpline = new BezierSpline();
-    private InterpolatingCubicPolynomialSpline interpolatingCubicPolynomialSpline = new InterpolatingCubicPolynomialSpline();
+    private ICPS ICPS = new ICPS();
 
     private JFrame frame;
     private JPanel panel;
     private JButton clear = new JButton("Clear");
     private JButton draw = new JButton("Draw");
+
+    static private JCheckBox bezierCheck = new JCheckBox("Bezier");
+    static private JCheckBox bezierSplineCheck = new JCheckBox("Bezier Spline");
+    static private JCheckBox ICPSCheck = new JCheckBox("Interpolating Cubic Polynomial Spline");
 
     public static void main(String[] args) {
         Curves curves = new Curves();
@@ -28,6 +32,10 @@ public class Curves extends JPanel {
         curves.panel.add(curves.clear);
         curves.panel.add(curves.draw);
         curves.panel.setBounds(0, 0, 100, 100);
+
+        curves.panel.add(bezierCheck);
+        curves.panel.add(bezierSplineCheck);
+        curves.panel.add(ICPSCheck);
 
         curves.frame.setTitle("Curves in Computer Graphics");
         curves.frame.setSize(1280, 720);
@@ -62,13 +70,15 @@ public class Curves extends JPanel {
                 points.clear();
                 bezier.clear();
                 bezierSpline.clear();
-                interpolatingCubicPolynomialSpline.clear();
+                ICPS.clear();
                 repaint();
             }
         });
 
         draw.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
+                if (points.size() <= 1) return;
+
                 //Removes points from array list points
                 bezier.clear();
                 bezier.generateCurve(points);
@@ -76,8 +86,9 @@ public class Curves extends JPanel {
                 bezierSpline.clear();
                 bezierSpline.generateCurve(points);
 
-                interpolatingCubicPolynomialSpline.clear();
-                interpolatingCubicPolynomialSpline.generateCurve(points);
+                ICPS.clear();
+                ICPS.generateCurve(points);
+
 
                 repaint();
             }
@@ -100,19 +111,27 @@ public class Curves extends JPanel {
             graphics2D.fillOval((int) (p.getX() - 5.0 / 2.0), (int) (p.getY() - 5.0 / 2.0), 5, 5);
         }
 
-        //Draws bezier curve
-        graphics2D.setColor(Color.RED);
-        graphics2D.draw(bezier.getPath());
-
-        //Draws bezier spline
-        graphics2D.setColor(Color.GREEN);
-        for (Path2D path2D : bezierSpline.getPaths()) {
-            graphics2D.draw(path2D);
+        if (bezierSplineCheck.isSelected()) {
+            //Draws bezier spline
+            graphics2D.setColor(Color.GREEN);
+            System.out.println("Size of bezier spline paths: " + bezierSpline.getPaths().size());
+            for (Path2D path2D : bezierSpline.getPaths()) {
+                graphics2D.draw(path2D);
+            }
         }
 
-        //Draws interpolating cubic polynomial spline
-        graphics2D.setColor(Color.BLUE);
-        graphics2D.draw(interpolatingCubicPolynomialSpline.getPath());
+
+        if (bezierCheck.isSelected()) {
+            //Draws bezier curve
+            graphics2D.setColor(Color.RED);
+            graphics2D.draw(bezier.getPath());
+        }
+
+        if (ICPSCheck.isSelected()) {
+            //Draws interpolating cubic polynomial spline
+            graphics2D.setColor(Color.BLUE);
+            graphics2D.draw(ICPS.getPath());
+        }
 
     }
 
