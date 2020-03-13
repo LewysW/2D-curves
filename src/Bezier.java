@@ -52,8 +52,25 @@ public class Bezier {
         return point;
     }
 
+    public Point2D derivative(double u) {
+        Point2D point = new Point2D.Double();
+        double coefficient;
+        double x = 0;
+        double y = 0;
+        double n = curve.size();
+
+        for (int i = 0; i <= n - 1; i++) {
+            coefficient = n * binomialCoefficient(n - 1, i) * Math.pow(u, i) * Math.pow(1 - u, n - 1 - i);
+            x += coefficient * (curve.get(i + 1).getX() - curve.get(i).getX());
+            y += coefficient * (curve.get(i + 1).getY() - curve.get(i).getY());
+        }
+
+        point.setLocation(x, y);
+
+        return point;
+    }
+
     private double binomialCoefficient(double n, double i) {
-        //n!/i!(n - i)!
         return (factorial(n)/(factorial(i)* factorial(n - i)));
     }
 

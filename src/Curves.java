@@ -114,6 +114,8 @@ public class Curves extends JPanel {
                     Random random = new Random();
                     double randomDouble = random.nextDouble();
                     int index = (int) (bezier.getCurve().size() * randomDouble);
+
+                    Point2D vector = bezier.derivative(index * (1.0 / bezier.getCurve().size()));
                     bezier.setPoint(bezier.getCurve().get(index));
                     repaint();
                 }
