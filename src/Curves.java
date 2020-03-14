@@ -111,6 +111,7 @@ public class Curves extends JPanel {
                 if (bezier.getCurve().size() <= 1) return;
 
                 bezier.resetTangent();
+                bezier.resetNormal();
 
                 if (bezierCheck.isSelected()) {
                     Random random = new Random();
@@ -121,8 +122,7 @@ public class Curves extends JPanel {
                     Point2D vector = bezier.derivative(index * (1.0 / bezier.getCurve().size()));
 
                     bezier.generateTangent(vector);
-
-                    System.out.println("x: " + vector.getX() + " y: " + vector.getY());
+                    bezier.generateNormal(vector);
 
                     repaint();
                 }
@@ -170,7 +170,10 @@ public class Curves extends JPanel {
                 graphics2D.drawOval((int) ((bezier.getPoint().getX() - 5.0 / 2.0) - 7.5),
                         (int) ((bezier.getPoint().getY() - 5.0 / 2.0) - 7.5), 20, 20);
 
+                g.setColor(Color.ORANGE);
                 graphics2D.draw(bezier.getTangent());
+                g.setColor(Color.magenta);
+                graphics2D.draw(bezier.getNormal());
             }
         }
 

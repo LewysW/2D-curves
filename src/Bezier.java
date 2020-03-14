@@ -8,6 +8,7 @@ public class Bezier {
     private Path2D path = new Path2D.Double();
     private Point2D point = null;
     private Path2D tangent = new Path2D.Double();
+    private Path2D normal = new Path2D.Double();
 
     public Point2D getPoint() {
         return point;
@@ -25,6 +26,7 @@ public class Bezier {
         curve.clear();
         path.reset();
         tangent.reset();
+        normal.reset();
     }
 
     public void generateCurve(ArrayList<Point2D> points) {
@@ -62,8 +64,6 @@ public class Bezier {
         double n = curve.size();
 
         for (int i = 0; i <= (n - 2); i++) {
-            System.out.println("n-1: " + Integer.toString((int)n-1));
-            System.out.println("binomial: " + binomialCoefficient(n - 1, i));
             coefficient = n * binomialCoefficient(n - 1, i) * Math.pow(u, i) * Math.pow(1 - u, n - 1 - i);
             x += coefficient * (curve.get(i + 1).getX() - curve.get(i).getX());
             y += coefficient * (curve.get(i + 1).getY() - curve.get(i).getY());
@@ -94,6 +94,28 @@ public class Bezier {
 
     public Path2D getTangent() {
         return tangent;
+    }
+
+    public void generateNormal(Point2D vector) {
+        vector.setLocation(-1 * vector.getY(), vector.getX());
+
+        Point2D prev = new Point2D.Double();
+        Point2D next = new Point2D.Double();
+
+        prev.setLocation(point.getX() - vector.getX(), point.getY() - vector.getY());
+        next.setLocation(point.getX() + vector.getX(), point.getY() + vector.getY());
+
+        normal.moveTo(prev.getX(), prev.getY());
+        normal.lineTo(point.getX(), point.getY());
+        normal.lineTo(next.getX(), next.getY());
+    }
+
+    public void resetNormal() {
+        normal.reset();
+    }
+
+    public Path2D getNormal() {
+        return normal;
     }
 
     private double binomialCoefficient(double n, double i) {
