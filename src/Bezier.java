@@ -69,8 +69,6 @@ public class Bezier {
             y += coefficient * (curve.get(i + 1).getY() - curve.get(i).getY());
         }
 
-        System.out.println(x);
-        System.out.println(y);
         point.setLocation(x, y);
 
         return point;

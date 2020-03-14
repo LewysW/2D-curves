@@ -54,7 +54,7 @@ public class ICPS {
             dy = -2 * (points.get(i + 1).getY() - points.get(i).getY()) + D_Y.getEntry(i, 0) + D_Y.getEntry(i + 1, 0);
 
 
-            for (double p = 0; p <= 1; p += 0.01) {
+            for (double p = 0; p <= 1; p += 0.001) {
                 //Calculates x and y coords of current spline using cubic spline formula
                 // Xi(p) = ai + biP + ciP^2 + diP^3
                 double x = ax + (bx * p) + (cx * Math.pow(p, 2)) + (dx * Math.pow(p, 3));
