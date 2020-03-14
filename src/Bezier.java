@@ -7,6 +7,7 @@ public class Bezier {
     private ArrayList<Point2D> curve = new ArrayList<>();
     private Path2D path = new Path2D.Double();
     private Point2D point = null;
+    private Path2D tangent = new Path2D.Double();
 
     public Point2D getPoint() {
         return point;
@@ -23,12 +24,13 @@ public class Bezier {
     public void clear() {
         curve.clear();
         path.reset();
+        tangent.reset();
     }
 
     public void generateCurve(ArrayList<Point2D> points) {
         curve.clear();
 
-        for (double u = 0; u <= 1; u += 0.0001) {
+        for (double u = 0; u <= 1; u += 0.01) {
             curve.add(formula(points, u, points.size() - 1));
         }
 
@@ -59,15 +61,39 @@ public class Bezier {
         double y = 0;
         double n = curve.size();
 
-        for (int i = 0; i <= n - 1; i++) {
+        for (int i = 0; i <= (n - 2); i++) {
+            System.out.println("n-1: " + Integer.toString((int)n-1));
+            System.out.println("binomial: " + binomialCoefficient(n - 1, i));
             coefficient = n * binomialCoefficient(n - 1, i) * Math.pow(u, i) * Math.pow(1 - u, n - 1 - i);
             x += coefficient * (curve.get(i + 1).getX() - curve.get(i).getX());
             y += coefficient * (curve.get(i + 1).getY() - curve.get(i).getY());
         }
 
+        System.out.println(x);
+        System.out.println(y);
         point.setLocation(x, y);
 
         return point;
+    }
+
+    public void generateTangent(Point2D vector) {
+        Point2D prev = new Point2D.Double();
+        Point2D next = new Point2D.Double();
+
+        prev.setLocation(point.getX() - vector.getX(), point.getY() - vector.getY());
+        next.setLocation(point.getX() + vector.getX(), point.getY() + vector.getY());
+
+        tangent.moveTo(prev.getX(), prev.getY());
+        tangent.lineTo(point.getX(), point.getY());
+        tangent.lineTo(next.getX(), next.getY());
+    }
+
+    public void resetTangent() {
+        tangent.reset();
+    }
+
+    public Path2D getTangent() {
+        return tangent;
     }
 
     private double binomialCoefficient(double n, double i) {

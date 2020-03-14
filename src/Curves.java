@@ -110,13 +110,20 @@ public class Curves extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (bezier.getCurve().size() <= 1) return;
 
+                bezier.resetTangent();
+
                 if (bezierCheck.isSelected()) {
                     Random random = new Random();
                     double randomDouble = random.nextDouble();
                     int index = (int) (bezier.getCurve().size() * randomDouble);
 
-                    Point2D vector = bezier.derivative(index * (1.0 / bezier.getCurve().size()));
                     bezier.setPoint(bezier.getCurve().get(index));
+                    Point2D vector = bezier.derivative(index * (1.0 / bezier.getCurve().size()));
+
+                    bezier.generateTangent(vector);
+
+                    System.out.println("x: " + vector.getX() + " y: " + vector.getY());
+
                     repaint();
                 }
             }
@@ -162,6 +169,8 @@ public class Curves extends JPanel {
                 g.setColor(Color.BLACK);
                 graphics2D.drawOval((int) ((bezier.getPoint().getX() - 5.0 / 2.0) - 7.5),
                         (int) ((bezier.getPoint().getY() - 5.0 / 2.0) - 7.5), 20, 20);
+
+                graphics2D.draw(bezier.getTangent());
             }
         }
 
@@ -181,8 +190,6 @@ public class Curves extends JPanel {
         //Clears points by setting display to the default background colour
         g.setColor(frame.getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-        //Buttons disappear when drawn over, so are simply
-        // re-added to avoid this issue in a simple way
     }
 
 }
